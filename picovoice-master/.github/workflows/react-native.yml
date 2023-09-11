@@ -1,0 +1,60 @@
+name: React Native
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - '.github/workflows/reaact-native.yml'
+      - 'sdk/react-native/**'
+      - '!sdk/react-native/README.md'
+      - 'resources/porcupine'
+      - 'resources/rhino'
+
+  pull_request:
+    branches: [ master, 'v[0-9]+.[0-9]+' ]
+    paths:
+      - '.github/workflows/reaact-native.yml'
+      - 'sdk/react-native/**'
+      - '!sdk/react-native/README.md'
+      - 'resources/porcupine'
+      - 'resources/rhino'
+
+defaults:
+  run:
+    working-directory: sdk/react-native
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Pre-build dependencies
+      run: npm install yarn
+      working-directory: resources/porcupine/binding/react-native
+
+    - name: Install Porcupine dependencies
+      run: yarn install && yarn pkg
+      working-directory: resources/porcupine/binding/react-native
+
+    - name: Install Rhino dependencies
+      run: yarn install && yarn pkg
+      working-directory: resources/rhino/binding/react-native
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Prepare
+      run: yarn prepare

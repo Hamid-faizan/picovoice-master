@@ -1,0 +1,41 @@
+{
+  "name": "picovoice-react-native-demo",
+  "version": "2.2.0",
+  "private": true,
+  "scripts": {
+    "start": "react-native start",
+    "lint": "eslint .",
+    "android-run": "node scripts/run_demo.js run-android",
+    "android-install": "yarn",
+    "android-bundle": "node scripts/run_demo.js bundle --dev false --platform android --entry-file index.js --bundle-output ./android/picovoice-rn-demo-app/src/main/assets/app.jsbundle --assets-dest ./android/picovoice-rn-demo-app/src/main/res/",
+    "ios-run": "node scripts/run_demo.js run-ios",
+    "ios-install": "yarn && yarn ios-link",
+    "ios-link": "cd ios && pod install && cd ..",
+    "ios-bundle": "node scripts/run_demo.js bundle --dev false --platform ios --entry-file index.js --bundle-output ios/app.jsbundle"
+  },
+  "dependencies": {
+    "@picovoice/picovoice-react-native": "^2.2.2",
+    "@picovoice/porcupine-react-native": "=2.2.1",
+    "@picovoice/react-native-voice-processor": "^1.2.0",
+    "@picovoice/rhino-react-native": "=2.2.2",
+    "react": "^17.0.2",
+    "react-native": "^0.68.7",
+    "yarn": "^1.22.19"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/runtime": "^7.12.5",
+    "@react-native-community/eslint-config": "^3.2.0",
+    "@types/react": "^17.0.33",
+    "@types/react-native": "^0.68.7",
+    "eslint": "^8.28.0",
+    "metro-react-native-babel-preset": "^0.64.0",
+    "mkdirp": "^1.0.4",
+    "prettier": "^2.8.0",
+    "react-test-renderer": "^17.0.2",
+    "typescript": "^4.9.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}

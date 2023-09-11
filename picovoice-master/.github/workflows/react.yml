@@ -1,0 +1,60 @@
+name: React
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - 'sdk/react/**'
+      - '!sdk/react/README.md'
+      - 'resources/porcupine'
+      - 'resources/rhino'
+      - '.github/workflows/react.yml'
+  pull_request:
+    branches: [ master, 'v[0-9]+.[0-9]+' ]
+    paths:
+      - 'sdk/react/**'
+      - '!sdk/react/README.md'
+      - 'resources/porcupine'
+      - 'resources/rhino'
+      - '.github/workflows/react.yml'
+
+defaults:
+  run:
+    working-directory: sdk/react
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Pre-build dependencies
+      run: npm install yarn
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Build
+      run: yarn build
+
+    - name: Lint
+      run: yarn lint
+
+    - name: Setup test
+      run: yarn setup-test
+
+    - name: Run test
+      run: yarn test --env ACCESS_KEY=${{secrets.PV_VALID_ACCESS_KEY}}
